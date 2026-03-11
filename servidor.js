@@ -33,6 +33,15 @@ app.post("/extrato", async (req, res) => {
   try {
     const { agencia, conta, dataInicioSolicitacao, dataFimSolicitacao } = req.body;
 
+    console.log("BODY RECEBIDO:", req.body);
+
+    if (!agencia || !conta) {
+      return res.status(400).json({
+        ok: false,
+        mensagem: "Agência e conta são obrigatórias.",
+      });
+    }
+
     const tokenResponse = await axios.post(
       "https://oauth.bb.com.br/oauth/token",
       new URLSearchParams({
@@ -67,9 +76,12 @@ app.post("/extrato", async (req, res) => {
       };
 
       if (dataInicioSolicitacao && dataFimSolicitacao) {
-        params.dataInicioSolicitacao = dataInicioSolicitacao;
-        params.dataFimSolicitacao = dataFimSolicitacao;
+        params.dataInicioSolicitacao = String(dataInicioSolicitacao).trim();
+        params.dataFimSolicitacao = String(dataFimSolicitacao).trim();
       }
+
+      console.log("URL BB:", url);
+      console.log("PARAMS ENVIADOS AO BB:", params);
 
       const extratoResponse = await axios.get(url, {
         httpsAgent: agent,
@@ -110,7 +122,9 @@ app.post("/extrato", async (req, res) => {
       },
     });
   } catch (error) {
+    console.error("STATUS:", error.response?.status);
     console.error("ERRO DETALHADO:", error.response ? error.response.data : error.message);
+    console.error("BODY RECEBIDO:", req.body);
 
     res.status(500).json({
       ok: false,
