@@ -2,21 +2,18 @@ require("dotenv").config();
 const express = require("express");
 const https = require("https");
 const axios = require("axios");
-const fs = require("fs");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-let pfx;
+const pfxBase64Limpo = process.env.BB_PFX_BASE64
+  .replace(/-----BEGIN CERTIFICATE-----/g, "")
+  .replace(/-----END CERTIFICATE-----/g, "")
+  .replace(/\s+/g, "");
 
-if (process.env.BB_PFX_BASE64) {
-  const pfxBase64Limpo = process.env.BB_PFX_BASE64.replace(/\s+/g, "");
-  pfx = Buffer.from(pfxBase64Limpo, "base64");
-} else {
-  pfx = fs.readFileSync("Certificado.pfx");
-}
+const pfx = Buffer.from(pfxBase64Limpo, "base64");
 
 const agent = new https.Agent({
   pfx: pfx,
