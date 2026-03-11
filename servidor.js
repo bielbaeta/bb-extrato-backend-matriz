@@ -72,7 +72,7 @@ app.post("/extrato", async (req, res) => {
       const params = {
         "gw-dev-app-key": APP_KEY,
         numeroPaginaSolicitacao: paginaAtual,
-        quantidadeRegistroPaginaSolicitacao: 50,
+        quantidadeRegistroPaginaSolicitacao: 200,
       };
 
       if (dataInicioSolicitacao && dataFimSolicitacao) {
