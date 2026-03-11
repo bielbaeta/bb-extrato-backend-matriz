@@ -123,7 +123,9 @@ app.post("/extrato", async (req, res) => {
     });
   } catch (error) {
     console.error("STATUS:", error.response?.status);
+    console.error("HEADERS:", error.response?.headers);
     console.error("ERRO DETALHADO:", error.response ? error.response.data : error.message);
+    console.error("ERRO STRING:", error.message);
     console.error("BODY RECEBIDO:", req.body);
 
     res.status(500).json({
