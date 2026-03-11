@@ -1,0 +1,5 @@
+node_modules/
+.env
+Certificado.pfx
+Certificado_base64.txt
+pfx-base64.txt
